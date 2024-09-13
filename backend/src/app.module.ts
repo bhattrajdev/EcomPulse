@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {config} from 'dotenv'
 import { UsersModule } from './users/users.module';
+import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
 config()
 @Module({
   imports: [
@@ -13,11 +14,21 @@ config()
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
     }),
     UsersModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule  {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CurrentUserMiddleware)
+      .exclude(
+        { path: 'users/signup', method: RequestMethod.POST },
+        { path: 'users/signin', method: RequestMethod.POST },
+      )
+      .forRoutes({path:'*',method:RequestMethod.ALL});
+  }
+}
