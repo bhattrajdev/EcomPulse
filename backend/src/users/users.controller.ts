@@ -16,6 +16,9 @@ import { UserEntity } from './entities/user.entity';
 import { UserSignInDto } from './dto/user-signin.dto';
 import { currentUser } from 'src/utility/decorators/current-user.decorator';
 import { AuthGuard } from 'src/utility/guards/authentication.guard';
+import { AuthorizeGuard } from 'src/utility/guards/authorization.guard';
+import { AuthorizeRoles } from 'src/utility/decorators/authorize-roles.decorator';
+import { Roles } from 'src/utility/common/user-roles.enum';
 
 @Controller('users')
 export class UsersController {
@@ -39,9 +42,6 @@ export class UsersController {
     return { accessToken, user };
   }
 
-
-
-
   @UseGuards(AuthGuard)
   @Get('me')
   getProfile(@currentUser() currentUser: UserEntity) {
@@ -53,6 +53,9 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+
+  @UseGuards(AuthorizeGuard,AuthGuard)
+  @AuthorizeRoles(Roles.ADMIN)
   @Get()
   async findAll(): Promise<UserEntity[]> {
     return await this.usersService.findAll();
@@ -72,5 +75,4 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
-
 }
