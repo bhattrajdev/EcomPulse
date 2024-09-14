@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {config} from 'dotenv'
 import { UsersModule } from './users/users.module';
-import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
+import { CurrentUserMiddleware } from './utility/middlewares/currentUser.middleware';
 config()
 @Module({
   imports: [
@@ -21,7 +21,7 @@ config()
   controllers: [],
   providers: [],
 })
-export class AppModule  {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CurrentUserMiddleware)
@@ -29,6 +29,6 @@ export class AppModule  {
         { path: 'users/signup', method: RequestMethod.POST },
         { path: 'users/signin', method: RequestMethod.POST },
       )
-      .forRoutes({path:'*',method:RequestMethod.ALL});
+      .forRoutes('*'); 
   }
 }
