@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {config} from 'dotenv'
 import { UsersModule } from './users/users.module';
 import { CurrentUserMiddleware } from './utility/middlewares/currentUser.middleware';
+import { CategoriesModule } from './categories/categories.module';
 config()
 @Module({
   imports: [
@@ -17,6 +18,7 @@ config()
       synchronize: true,
     }),
     UsersModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],

@@ -34,7 +34,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
       req.currentUser = user;
 
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException('Token Expired');
     }
 
     next();
