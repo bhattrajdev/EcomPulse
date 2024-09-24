@@ -4,6 +4,7 @@ import {config} from 'dotenv'
 import { UsersModule } from './users/users.module';
 import { CurrentUserMiddleware } from './utility/middlewares/currentUser.middleware';
 import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
 config()
 @Module({
   imports: [
@@ -19,6 +20,7 @@ config()
     }),
     UsersModule,
     CategoriesModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
